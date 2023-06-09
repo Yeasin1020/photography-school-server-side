@@ -15,7 +15,7 @@ app.use(express.json())
 
 
 
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.pyrxehg.mongodb.net/?retryWrites=true&w=majority`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -48,6 +48,42 @@ async function run() {
 		console.log(result);
 		res.send(result)
 	})
+
+  app.post('/postClass', async(req, res) => {
+		const body = req.body;
+		const result = await classesCollection.insertOne(body)
+		console.log(result);
+		res.send(result)
+	});
+
+  app.get('/allClass', async(req, res) => {
+		const cursor = classesCollection.find({});
+		const result = await cursor.toArray();
+		const parts = result.reverse();
+		res.send(parts)
+	});
+
+  app.get("/classDetails/:id", async (req, res) => {
+		const id = req.params.id;
+		const query = {
+		  _id: new ObjectId(id),
+		};
+  
+		const options = {
+		  projection: {
+      className: 1,
+			instructorName: 1,
+			email: 1,
+			seats: 1,
+			Price: 1,
+			textarea: 1,
+			_id: 1,
+		  },
+		};
+  
+		const result = await classesCollection.findOne(query, options);
+		res.send(result);
+	  });
 
 
     // Send a ping to confirm a successful connection
