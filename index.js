@@ -55,7 +55,7 @@ async function run() {
 		console.log(result);
 		res.send(result)
 	})
-
+	// post class
   app.post('/postClass', async(req, res) => {
 		const body = req.body;
 		const result = await classesCollection.insertOne(body)
@@ -63,12 +63,44 @@ async function run() {
 		res.send(result)
 	});
 
+	// data patch admin
+
+	app.patch('/users/admin/:id', async(req, res) => {
+		const id = req.params.id;
+		const filter = {_id: new ObjectId(id)};
+		const updateDoc = {
+			$set: {
+				role: 'admin'
+			},
+		};
+		const result = await usersCollection.updateOne(filter, updateDoc)
+		res.send(result)
+	})
+
+	//data patch instructor
+
+	app.patch('/users/instructor/:id', async(req, res) => {
+		const id = req.params.id;
+		const filter = {_id: new ObjectId(id)};
+		const updateDoc = {
+			$set: {
+				role: 'admin'
+			},
+		};
+		const result = await usersCollection.updateOne(filter, updateDoc)
+		res.send(result)
+	})
+
+	// get data all
+
   app.get('/allClass', async(req, res) => {
 		const cursor = classesCollection.find({});
 		const result = await cursor.toArray();
 		const parts = result.reverse();
 		res.send(parts)
 	});
+
+	//get data by id
 
   app.get("/classDetails/:id", async (req, res) => {
 		const id = req.params.id;
