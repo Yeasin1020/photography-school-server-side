@@ -34,6 +34,13 @@ async function run() {
     const bookingsCollection = client.db('PhotographySchool').collection('bookings')
 
 
+
+	app.get('/users', async(req, res) => {
+		const result = await usersCollection.find().toArray();
+		console.log(result);
+		res.send(result);
+	})
+
 	//save user email
 
 	app.put('/users/:email', async(req,res)=>{
