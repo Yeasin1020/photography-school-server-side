@@ -116,6 +116,7 @@ async function run() {
 			seats: 1,
 			Price: 1,
 			textarea: 1,
+			classPhoto: 1,
 			_id: 1,
 		  },
 		};
@@ -133,14 +134,14 @@ async function run() {
 		res.send(result);
 	  });
 
-	  // data pending req
+	  // data deny req
 
-	  app.patch('/class/pending/:id', async(req, res) => {
+	  app.patch('/class/deny/:id', async(req, res) => {
 		const id = req.params.id;
 		const filter = {_id: new ObjectId(id)};
 		const updateDoc = {
 			$set: {
-				status: 'pending'
+				status: 'deny'
 			},
 		};
 		const result = await classesCollection.updateOne(filter, updateDoc)
@@ -159,6 +160,18 @@ async function run() {
 		};
 		const result = await classesCollection.updateOne(filter, updateDoc)
 		res.send(result)
+	})
+
+	// approve data get
+
+	app.get("/classesApprove/:text", async(req, res)=> {
+		if(req.params.text == "approve"){
+			const result = await classesCollection.find({status: req.params.text}).toArray();
+			return res.send(result)
+		}
+		const cursor = classesCollection.find();
+		const result = await cursor.toArray();
+		res.send(result);
 	})
 
     // Send a ping to confirm a successful connection
