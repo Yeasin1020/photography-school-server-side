@@ -84,7 +84,7 @@ async function run() {
 		const filter = {_id: new ObjectId(id)};
 		const updateDoc = {
 			$set: {
-				role: 'admin'
+				role: 'instructor'
 			},
 		};
 		const result = await usersCollection.updateOne(filter, updateDoc)
@@ -124,6 +124,42 @@ async function run() {
 		res.send(result);
 	  });
 
+
+	  // Data get by email
+
+	  app.get("/users/:email", async (req, res) => {
+		const cursor = usersCollection.find({ email: req.params.email });
+		const result = await cursor.toArray();
+		res.send(result);
+	  });
+
+	  // data pending req
+
+	  app.patch('/class/pending/:id', async(req, res) => {
+		const id = req.params.id;
+		const filter = {_id: new ObjectId(id)};
+		const updateDoc = {
+			$set: {
+				status: 'pending'
+			},
+		};
+		const result = await classesCollection.updateOne(filter, updateDoc)
+		res.send(result)
+	})
+
+	// data approve req
+
+	app.patch('/class/approve/:id', async(req, res) => {
+		const id = req.params.id;
+		const filter = {_id: new ObjectId(id)};
+		const updateDoc = {
+			$set: {
+				status: 'approve'
+			},
+		};
+		const result = await classesCollection.updateOne(filter, updateDoc)
+		res.send(result)
+	})
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
