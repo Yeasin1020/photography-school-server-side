@@ -32,6 +32,7 @@ async function run() {
 	const usersCollection = client.db('PhotographySchool').collection('users')
     const classesCollection = client.db('PhotographySchool').collection('classes')
     const bookingsCollection = client.db('PhotographySchool').collection('bookings')
+    const SelectedClassCollection = client.db('PhotographySchool').collection('selectedClass')
 
 
 
@@ -194,14 +195,20 @@ async function run() {
 		res.send(result);
 	})
 
+	app.post("/selected", async (req, res) => {
+		const item = req.body;
+		const result = await SelectedClassCollection.insertOne(item);
+		res.send(result);
+	  });
+
 	// data get from classes by email
 
-	// app.get("/role/:text", async(req, res)=> {
+	// app.get("/classes/:text", async(req, res)=> {
 	// 	if(req.params.text == "instructor"){
-	// 		const result = await usersCollection.find({role: req.params.text}).toArray();
+	// 		const result = await classesCollection.find({role: req.params.text}).toArray();
 	// 		return res.send(result)
 	// 	}
-	// 	const cursor = usersCollection.find();
+	// 	const cursor = classesCollection.find();
 	// 	const result = await cursor.toArray();
 	// 	res.send(result);
 	// })
