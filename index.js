@@ -173,7 +173,7 @@ app.patch('/class/approve/:id', async(req, res) => {
 
 app.get("/classesApprove/:text", async(req, res)=> {
 	if(req.params.text == "approve"){
-		const result = await classesCollection.find({status: req.params.text}).toArray();
+		const result = await classesCollection.find.limit(6)({status: req.params.text}).toArray();
 		return res.send(result)
 	}
 	const cursor = classesCollection.find();
