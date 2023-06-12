@@ -201,6 +201,23 @@ async function run() {
 		res.send(result);
 	  });
 
+	   // data get by email from selectedClassCollection
+
+	   app.get("/myClass/:email", async (req, res) => {
+		const cursor = SelectedClassCollection.find({ email: req.params.email });
+		const result = await cursor.toArray();
+		res.send(result);
+	  });
+
+	//   select class delete
+	app.delete('/classDelete/:id', async(req, res) => {
+		const id = req.params.id;
+		console.log(id)
+		const query = {_id: new ObjectId(id)}
+		const result = await SelectedClassCollection.deleteOne(query);
+		res.send(result)
+	});
+
 	// data get from classes by email
 
 	// app.get("/classes/:text", async(req, res)=> {
