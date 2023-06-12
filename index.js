@@ -126,10 +126,18 @@ async function run() {
 	  });
 
 
-	  // Data get by email
+	  // Data get by email from user
 
 	  app.get("/users/:email", async (req, res) => {
 		const cursor = usersCollection.find({ email: req.params.email });
+		const result = await cursor.toArray();
+		res.send(result);
+	  });
+
+	  // data get by email from classes
+
+	  app.get("/classes/:email", async (req, res) => {
+		const cursor = classesCollection.find({ email: req.params.email });
 		const result = await cursor.toArray();
 		res.send(result);
 	  });
@@ -173,6 +181,32 @@ async function run() {
 		const result = await cursor.toArray();
 		res.send(result);
 	})
+
+	// data get instructor
+
+	app.get("/role/:text", async(req, res)=> {
+		if(req.params.text == "instructor"){
+			const result = await usersCollection.find({role: req.params.text}).toArray();
+			return res.send(result)
+		}
+		const cursor = usersCollection.find();
+		const result = await cursor.toArray();
+		res.send(result);
+	})
+
+	// data get from classes by email
+
+	// app.get("/role/:text", async(req, res)=> {
+	// 	if(req.params.text == "instructor"){
+	// 		const result = await usersCollection.find({role: req.params.text}).toArray();
+	// 		return res.send(result)
+	// 	}
+	// 	const cursor = usersCollection.find();
+	// 	const result = await cursor.toArray();
+	// 	res.send(result);
+	// })
+
+
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
